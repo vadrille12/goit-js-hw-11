@@ -1,6 +1,4 @@
 import Api from "./js/api";
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import galleryTpl from './partials/gallery'
 
 const refs = {
     searchForm: document.querySelector('.js-search-form'),
