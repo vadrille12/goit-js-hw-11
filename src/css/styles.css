@@ -23,12 +23,11 @@ body {
 }
 
 .input {
-    padding: 0 2px 0 2px;
+    padding: 0 10px;
     height: 100%;
     width: 100%;
     border: none;
     border-radius: 2px 0 0 2px;
-
 }
 
 .input:focus {
@@ -52,6 +51,12 @@ body {
     border-radius: 4px;
     color: #fff;
     cursor: pointer;
+}
+
+.search-button {
+    display: flex;
+    align-items: center;
+    padding: 0 6px;
 }
 
 .gallery {
