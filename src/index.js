@@ -1,44 +1,46 @@
-import '../src/css/common.css';
+import './css/styles.css';
 import axios from 'axios';
 import Notiflix from 'notiflix';
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 
-const refs = {
-  galleryBox: document.querySelector('.gallery'),
-  showMoreBtn: document.querySelector('.show-more'),
-  form: document.querySelector('.search-form'),
-}
+const searchForm = document.querySelector('.search-form');
+const galleryBox = document.querySelector('.gallery');
+const showMoreBtn = document.querySelector('.show-more');
+const form = document.querySelector('.search-form');
 
-refs.form.addEventListener('submit', onSearch);
-refs.showMoreBtn.addEventListener('click', onShowMore);
+
+searchForm.addEventListener('submit', onSearch);
+showMoreBtn.addEventListener('click', onShowMore);
 
 let gallery = new SimpleLightbox('.gallery a');
+
 
 let currentPage = 1;
 
 async function onSearch(e) {
     e.preventDefault();
 
-    const searchQuery = refs.form.elements.searchQuery.value;
+    const searchQuery = form.elements.searchQuery.value;
     currentPage = 1;
 
     const data = await fetchData(searchQuery);
-    refs.galleryBox.innerHTML = '';
-    refs.showMoreBtn.hidden = true;
+    galleryBox.innerHTML = '';
+    showMoreBtn.hidden = true;
 
     if (data.totalHits === 0) {
         return Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
+    
     }
 
     createMarkup(data.hits);
     Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
-  gallery.refresh();
-  
+    gallery.refresh();
     if (data.totalHits > 40) {
-        refs.showMoreBtn.hidden = false;
-  }
-  
+       
+        showMoreBtn.hidden = false;
+        
+    }
     const { height: cardHeight } = document
         .querySelector(".gallery")
         .firstElementChild.getBoundingClientRect();
@@ -74,15 +76,15 @@ function createMarkup(data) {
   </div>
 </div>`
     })
-    refs.galleryBox.insertAdjacentHTML('beforeend', markup.join(''))   
+    galleryBox.insertAdjacentHTML('beforeend', markup.join(''))   
 }
 
 async function fetchData(value, page = 1) {
-    const BASE_URL = `https://pixabay.com/api/`;
+    const url = `https://pixabay.com/api/`;
     const response = await axios({
-        BASE_URL,
+        url,
         params: {
-            key: '32720013-bdc30f746cb856c2fdee18335',
+            key: '32947980-69693e3c3da6102d615bc169f',
             q: value,
             image_type: 'photo',
             orientation: 'horizontal',
@@ -95,7 +97,7 @@ async function fetchData(value, page = 1) {
 }
 
 async function onShowMore() {
-    const searchQuery = refs.form.elements.searchQuery.value;
+    const searchQuery = form.elements.searchQuery.value;
     currentPage += 1;
     const dataAfterLoad = await fetchData(searchQuery, currentPage);
 
@@ -113,7 +115,7 @@ async function onShowMore() {
     });
 
     if (currentPage * 40 >= dataAfterLoad.totalHits) {
-        refs.showMoreBtn.hidden = true;
+        showMoreBtn.hidden = true;
         return Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
     }
 }
